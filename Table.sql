@@ -43,5 +43,15 @@ CREATE TABLE messages (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   message TEXT
 );
+CREATE TABLE balancess (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  cs_id varchar(10) ,
+  date_time datetime ,
+  amount int,
+  status varchar(10) ,
+  total int 
+  FOREIGN KEY (cs_id) REFERENCES customer(cs_id)
+) 
+
 
 
