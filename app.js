@@ -542,9 +542,27 @@ app.delete('/delete/customer', (req, res) => {
             console.error('Error executing query for deleting balances:', err);
             return res.status(500).json({ error: 'Failed to delete data from balances table' });
           }
+          const deleteUserQuery = 'DELETE FROM users WHERE user_id = ?';
+          connection.query(deleteUserQuery, [user_id], (err, userResult) => {
+            if (err) {
+              console.error('Error executing query for deleting users:', err);
+              res.status(500).json({ error: 'Failed to delete data from users table' });
+              return;
+            }
+            return res.json({ message: 'Data deleted successfully' });
+          });
+        });
+      } else {
+        const deleteUserQuery = 'DELETE FROM users WHERE user_id = ?';
+        connection.query(deleteUserQuery, [user_id], (err, userResult) => {
+          if (err) {
+            console.error('Error executing query for deleting users:', err);
+            res.status(500).json({ error: 'Failed to delete data from users table' });
+            return;
+          }
+          return res.json({ message: 'Data deleted successfully' });
         });
       }
-      return res.json({ message: 'Data deleted successfully' });
     });
   });
 });
@@ -556,23 +574,27 @@ app.delete('/delete/admin-owner', (req, res) => {
     return;
   }
 
-  // ลบข้อมูลจากตาราง admin
   const deleteAdminQuery = 'DELETE FROM admin WHERE user_id = ?';
   connection.query(deleteAdminQuery, [user_id], (err, adminResult) => {
     if (err) {
       console.error('Error executing query for deleting admin:', err);
       return res.status(500).json({ error: 'Failed to delete data from admin table' });
     }
-
-    // ลบข้อมูลจากตาราง owner
     const deleteOwnerQuery = 'DELETE FROM owner WHERE user_id = ?';
     connection.query(deleteOwnerQuery, [user_id], (err, ownerResult) => {
       if (err) {
         console.error('Error executing query for deleting owner:', err);
         return res.status(500).json({ error: 'Failed to delete data from owner table' });
       }
+      const deleteUserQuery = 'DELETE FROM users WHERE user_id = ?';
+      connection.query(deleteUserQuery, [user_id], (err, userResult) => {
+        if (err) {
+          console.error('Error executing query for deleting users:', err);
+          return res.status(500).json({ error: 'Failed to delete data from users table' });
+        }
 
-      return res.json({ message: 'Data deleted successfully' });
+        return res.json({ message: 'Data deleted successfully' });
+      });
     });
   });
 });
